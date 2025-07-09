@@ -33,8 +33,6 @@ pipeline {
                 '''
             }
         }
-    }
-
         stage('E2E') { // end 2 end tests using playwright
             agent {
                 docker {
