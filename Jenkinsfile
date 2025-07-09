@@ -35,6 +35,24 @@ pipeline {
         }
     }
 
+        stage('E2E') { // end 2 end tests using playwright
+            agent {
+                docker {
+                    // see https://playwright.dev/docs/docker
+                    image 'mcr.microsoft.com/playwright:v1.53.0-noble'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    npm install -g serve
+                    serve -s build
+                    npx playwright test
+                '''
+            }
+        }
+    }
+
     post {
         always {
             junit 'jest-results/junit.xml'
