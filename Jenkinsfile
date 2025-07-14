@@ -86,9 +86,9 @@ pipeline {
             steps {
                 sh '''
                     # see https://docs.netlify.com/cli/get-started/
-                    npm install netlify-cli
+                    # npm install netlify-cli
                     # in case of issues with latest netlyfy install specific version
-                    # npm install netlify-cli@20.1.1
+                    npm install netlify-cli@20.1.1
                     node_modules/.bin/netlify --version
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
                     node_modules/.bin/netlify status
