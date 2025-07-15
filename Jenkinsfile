@@ -76,7 +76,29 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy staging (preprod)') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    # see https://docs.netlify.com/cli/get-started/
+                    # npm install netlify-cli
+                    # in case of issues with latest netlyfy install specific version
+                    npm install netlify-cli@20.1.1
+                    node_modules/.bin/netlify --version
+                    echo "Deploying to staging. Site ID: $NETLIFY_SITE_ID"
+                    node_modules/.bin/netlify status
+                    # see that when deploying to production, a flag --prod is added
+                    node_modules/.bin/netlify deploy --dir=build
+                '''
+            }
+        }
+
+        stage('Deploy prod') {
             agent {
                 docker {
                     image 'node:18-alpine'
