@@ -97,7 +97,7 @@ pipeline {
                     # flag --json added to get deployment info in json format and send it to a file in the workspace
                     node_modules/.bin/netlify deploy --dir=build --json > deploy-output.json
                     # parse json file with node-jq and read deployment url
-                    node_modules/.bin/node-jq -r 'deploy_url' deploy-output.json
+                    node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json
                 '''
             }
         }
