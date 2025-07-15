@@ -131,6 +131,8 @@ pipeline {
             }
         }
 
+        // Continous Delivery: release to prod needs to be approved (hence approval button makes sense)
+        // Continues Deployment: doesn´t need approval (no need of an approval button)
         stage('Approval') {
             steps {
                 timeout(time: 15, unit: 'MINUTES') {
