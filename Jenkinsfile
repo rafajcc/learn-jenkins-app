@@ -86,21 +86,25 @@ pipeline {
             steps {
                 sh '''
                     # see https://docs.netlify.com/cli/get-started/
-                    # npm install netlify-cli
+                    # npm install netlify-cli node-jq
                     # in case of issues with latest netlyfy install specific version
-                    npm install netlify-cli@20.1.1
+                    npm install netlify-cli@20.1.1 node-jq
                     node_modules/.bin/netlify --version
                     echo "Deploying to staging. Site ID: $NETLIFY_SITE_ID"
                     node_modules/.bin/netlify status
-                    # see that when deploying to production, a flag --prod is added
-                    node_modules/.bin/netlify deploy --dir=build
+                    # see that when deploying to production, a flag --prod is added,
+                    # without it, Netlify will deploy to a temporary random url every time
+                    # flag --json added to get deployment info in json format and send it to a file in the workspace
+                    node_modules/.bin/netlify deploy --dir=build --json > deploy-output.json
+                    # parse json file with node-jq and read deployment url
+                    node_modules/.bin/node-jq -r 'deploy_url' deploy-output.json
                 '''
             }
         }
 
         stage('Approval') {
             steps {
-                timeout(time: 1, unit: 'MINUTES') {
+                timeout(time: 15, unit: 'MINUTES') {
                     input message: 'Do you wish to deploy to production?',
                         ok: 'Yes, I´m sure I want to deploy'
                 }
