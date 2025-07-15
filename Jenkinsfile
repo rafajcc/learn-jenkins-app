@@ -6,6 +6,9 @@ pipeline {
         // created at Netlify "Personal access tokens"
         // defined in Jenkins "Credentials"
         NETLIFY_AUTH_TOKEN = credentials('netlify-token')
+        // Application version
+        // See https://www.jenkins.io/doc/pipeline/tour/environment/ about Jenkins environment variables
+        REACT_APP_VERSION = "1.0.$BUILD_ID"
     }
 
     stages {
