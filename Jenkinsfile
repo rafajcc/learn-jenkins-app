@@ -109,7 +109,7 @@ pipeline {
                 script {
                     // parse json file with node-jq and read deployment url,
                     // then set an environment variable so it can be read at next stage
-                    env.STAGING_URL = sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json", returnStdout: true)
+                    env.STAGING_URL = sh(script: "node-jq -r '.deploy_url' deploy-output.json", returnStdout: true)
                 }
             }
         }
