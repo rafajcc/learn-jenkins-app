@@ -70,8 +70,6 @@ pipeline {
                     }
                     steps {
                         sh '''
-                            
-                            # image is installed in local hence it needs node_modules...
                             serve -s build &
                             sleep 10
                             npx playwright test --reporter=html
