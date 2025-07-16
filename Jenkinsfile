@@ -64,15 +64,15 @@ pipeline {
                     agent {
                         docker {
                             // see https://playwright.dev/docs/docker
-                            image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                            image 'my-playwright'
                             reuseNode true
                         }
                     }
                     steps {
                         sh '''
-                            npm install serve
+                            
                             # image is installed in local hence it needs node_modules...
-                            node_modules/.bin/serve -s build &
+                            serve -s build &
                             sleep 10
                             npx playwright test --reporter=html
                         '''
