@@ -89,7 +89,8 @@ pipeline {
         stage('Deploy staging (preprod)') {
             agent {
                 docker {
-                    image 'node:18-alpine'
+                    // playwright includes node.js so it can be used instead of node image
+                    image 'my-playwright'
                     reuseNode true
                 }
             }
@@ -99,13 +100,13 @@ pipeline {
                     # npm install netlify-cli node-jq
                     # in case of issues with latest netlyfy install specific version
                     npm install netlify-cli@20.1.1 node-jq
-                    node_modules/.bin/netlify --version
+                    netlify --version
                     echo "Deploying to staging. Site ID: $NETLIFY_SITE_ID"
-                    node_modules/.bin/netlify status
+                    netlify status
                     # see that when deploying to production, a flag --prod is added,
                     # without it, Netlify will deploy to a temporary random url every time
                     # flag --json added to get deployment info in json format and send it to a file in the workspace
-                    node_modules/.bin/netlify deploy --dir=build --json > deploy-output.json
+                    netlify deploy --dir=build --json > deploy-output.json
                 '''
                 script {
                     // parse json file with node-jq and read deployment url,
@@ -119,7 +120,7 @@ pipeline {
             agent {
                 docker {
                     // see https://playwright.dev/docs/docker
-                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    image 'my-playwright'
                     reuseNode true
                 }
             }
@@ -155,7 +156,7 @@ pipeline {
         stage('Deploy prod') {
             agent {
                 docker {
-                    image 'node:18-alpine'
+                    image 'my-playwright'
                     reuseNode true
                 }
             }
@@ -165,10 +166,10 @@ pipeline {
                     # npm install netlify-cli
                     # in case of issues with latest netlyfy install specific version
                     npm install netlify-cli@20.1.1
-                    node_modules/.bin/netlify --version
+                    netlify --version
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
-                    node_modules/.bin/netlify status
-                    node_modules/.bin/netlify deploy --dir=build --prod
+                    netlify status
+                    netlify deploy --dir=build --prod
                 '''
             }
         }
@@ -177,7 +178,7 @@ pipeline {
             agent {
                 docker {
                     // see https://playwright.dev/docs/docker
-                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    image 'my-playwright'
                     reuseNode true
                 }
             }
