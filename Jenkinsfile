@@ -71,6 +71,7 @@ pipeline {
                     steps {
                         sh '''
                             npm install serve
+                            # image is installed in local hence it needs node_modules...
                             node_modules/.bin/serve -s build &
                             sleep 10
                             npx playwright test --reporter=html
@@ -97,9 +98,6 @@ pipeline {
             steps {
                 sh '''
                     # see https://docs.netlify.com/cli/get-started/
-                    # npm install netlify-cli node-jq
-                    # in case of issues with latest netlyfy install specific version
-                    npm install netlify-cli@20.1.1 node-jq
                     netlify --version
                     echo "Deploying to staging. Site ID: $NETLIFY_SITE_ID"
                     netlify status
@@ -163,9 +161,6 @@ pipeline {
             steps {
                 sh '''
                     # see https://docs.netlify.com/cli/get-started/
-                    # npm install netlify-cli
-                    # in case of issues with latest netlyfy install specific version
-                    npm install netlify-cli@20.1.1
                     netlify --version
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
                     netlify status
