@@ -1,0 +1,13 @@
+// Pipeline to build a docker image (every night) from Jenkins
+pipeline {
+    agent any
+
+    stages {
+        // build custom docker image
+        stage('Build Docker image') {
+            steps {
+                sh 'docker build -t my-playwright .'
+            }
+        }
+    }
+}
